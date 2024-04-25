@@ -4,15 +4,20 @@ import java.util.Objects;
 
 import com.example.demo.core.model.BaseEntity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "geolocations")
 public class GeolocationEntity extends BaseEntity {
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
     public GeolocationEntity() {
-        super();
     }
 
     public GeolocationEntity(Long id, String name) {
-        super(id);
         this.name = name;
     }
 

@@ -1,10 +1,11 @@
 package com.example.demo.types.repository;
 
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-import com.example.demo.core.repository.MapRepository;
+import org.springframework.data.repository.CrudRepository;
+
 import com.example.demo.types.model.TypeEntity;
 
-@Repository
-public class TypeRepository extends MapRepository<TypeEntity> {
+public interface TypeRepository extends CrudRepository<TypeEntity, Long> {
+    Optional<TypeEntity> findByNameIgnoreCase(String name);
 }

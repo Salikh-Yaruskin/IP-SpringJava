@@ -1,10 +1,11 @@
 package com.example.demo.geolocations.repository;
 
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-import com.example.demo.core.repository.MapRepository;
+import org.springframework.data.repository.CrudRepository;
+
 import com.example.demo.geolocations.model.GeolocationEntity;
 
-@Repository
-public class GeolocationRepository extends MapRepository<GeolocationEntity> {
+public interface GeolocationRepository extends CrudRepository<GeolocationEntity, Long> {
+    Optional<GeolocationEntity> findByNameIgnoreCase(String name);
 }

@@ -4,28 +4,46 @@ import java.util.Objects;
 
 import com.example.demo.core.model.BaseEntity;
 import com.example.demo.types.model.TypeEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 import com.example.demo.apartments.api.PropertyStatus;
 import com.example.demo.geolocations.model.GeolocationEntity;
 
+@Entity
+@Table(name = "apartments")
 public class ApartmentEntity extends BaseEntity {
+    @ManyToOne
+    @JoinColumn(name = "typeId", nullable = false)
     private TypeEntity type;
+    @Column(nullable = false)
     private PropertyStatus propertyStatus;
+    @Column(nullable = false)
     private Boolean popular;
+    @Column(nullable = false)
     private Double price;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "geolocationId", nullable = false)
     private GeolocationEntity geolocation;
+    @Column(nullable = false)
     private Boolean shower;
+    @Column(nullable = false)
     private Integer park;
 
     public ApartmentEntity() {
-        super();
     }
 
     public ApartmentEntity(Long id, TypeEntity type,
             PropertyStatus propertyStatus, Boolean popular, Double price, String name,
             String description, GeolocationEntity geolocation, Boolean shower, Integer park) {
-        super(id);
         this.type = type;
         this.propertyStatus = propertyStatus;
         this.popular = popular;

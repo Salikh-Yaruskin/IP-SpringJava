@@ -1,15 +1,14 @@
 package com.example.demo.apartments.service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
 import com.example.demo.apartments.model.ApartmentEntity;
 import com.example.demo.apartments.repository.ApartmentRepository;
 import com.example.demo.core.error.NotFoundException;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ApartmentService {
@@ -19,26 +18,27 @@ public class ApartmentService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public List<ApartmentEntity> getAll(Long typeId, Long geolocationId) {
-        Stream<ApartmentEntity> stream = repository.getAll().stream();
-
-        if (!Objects.equals(typeId, 0L)) {
-            stream = stream.filter(item -> item.getType().getId().equals(typeId));
+        if (typeId <= 0L) {
+            return null;
+        } else {
+            return repository.findByTypeIdAndGeolocationId(typeId, geolocationId);
         }
-        if (!Objects.equals(geolocationId, 0L)) {
-            stream = stream.filter(item -> item.getGeolocation().getId().equals(geolocationId));
-        }
-
-        return stream.toList();
     }
 
+    @Transactional(readOnly = true)
     public ApartmentEntity get(Long id) {
-        return Optional.ofNullable(repository.get(id))
-                .orElseThrow(() -> new NotFoundException(id));
+        return repository.findOneById(id)
+                .orElseThrow(() -> new NotFoundException(ApartmentEntity.class, id));
     }
 
+    @Transactional
     public ApartmentEntity create(ApartmentEntity entity) {
-        return repository.create(entity);
+        if (entity == null) {
+            throw new IllegalArgumentException("Entity is null");
+        }
+        return repository.save(entity);
     }
 
     public ApartmentEntity update(Long id, ApartmentEntity entity) {
@@ -52,11 +52,12 @@ public class ApartmentService {
         existsEntity.setGeolocation(entity.getGeolocation());
         existsEntity.setShower(entity.getShower());
         existsEntity.setPark(entity.getPark());
-        return repository.update(existsEntity);
+        return repository.save(existsEntity);
     }
 
     public ApartmentEntity delete(Long id) {
         final ApartmentEntity existsEntity = get(id);
-        return repository.delete(existsEntity);
+        repository.delete(existsEntity);
+        return existsEntity;
     }
 }
