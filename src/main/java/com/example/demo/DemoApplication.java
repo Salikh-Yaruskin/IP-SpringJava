@@ -64,14 +64,12 @@ public class DemoApplication implements CommandLineRunner {
 			// "alexei@gmail.com", "12345"));
 
 			log.info("Create default items values");
-			final var apartments = List.of(
-					new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
-							"dfdsfds sdf", "опр", geolocation1, true, 3),
-					new ApartmentEntity(type2, PropertyStatus.SALE, true, 122423.00,
-							"dfdsfds sdf1", "опр", geolocation2, true, 3),
-					new ApartmentEntity(type3, PropertyStatus.SALE, true, 122423.00,
-							"dfdsfds sdf2", "опр", geolocation3, true, 3));
-			apartments.forEach(apartment -> apartmentService.create(apartment));
+			apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
+					"dfdsfds sdf", "опр", geolocation1, true, 3));
+			apartmentService.create(new ApartmentEntity(type2, PropertyStatus.SALE, true, 122423.00,
+					"dfdsfds sdf", "опр", geolocation2, true, 3));
+			apartmentService.create(new ApartmentEntity(type3, PropertyStatus.SALE, true, 122423.00,
+					"dfdsfds sdf", "опр", geolocation3, true, 3));
 
 			// apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true,
 			// 122423.00,

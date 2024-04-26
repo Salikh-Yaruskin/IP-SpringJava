@@ -54,20 +54,23 @@ class ApartmentServiceTests {
         geolocation2 = geolocationService.create(new GeolocationEntity("Москва"));
         geolocation3 = geolocationService.create(new GeolocationEntity("Санкт-Петербург"));
 
-        final var apartments = List.of(
-                new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
-                        "dfdsfds sdf", "опр", geolocation1, true, 3),
-                new ApartmentEntity(type2, PropertyStatus.SALE, true, 122423.00,
-                        "dfdsfds sdf", "опр", geolocation2, true, 3),
-                new ApartmentEntity(type3, PropertyStatus.SALE, true, 122423.00,
-                        "dfdsfds sdf", "опр", geolocation3, true, 3));
-        apartments.forEach(apartment -> apartmentService.create(apartment));
+        apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
+                "dfdsfds sdf", "опр", geolocation1, true, 3));
+        apartmentService.create(new ApartmentEntity(type2, PropertyStatus.SALE, true, 122423.00,
+                "dfdsfds sdf", "опр", geolocation2, true, 3));
+        apartmentService.create(new ApartmentEntity(type3, PropertyStatus.SALE, true, 122423.00,
+                "dfdsfds sdf", "опр", geolocation3, true, 3));
+
     }
 
     @AfterEach
     void removeData() {
-        apartmentService.getAll(type1.getId(), geolocation1.getId())
-                .forEach(apartment -> apartmentService.delete(apartment.getId()));
+        typeService.getAll().forEach(type -> {
+            geolocationService.getAll().forEach(geolocation -> {
+                apartmentService.getAll(type.getId(), geolocation.getId())
+                        .forEach(apartment -> apartmentService.delete(apartment.getId()));
+            });
+        });
         typeService.getAll().forEach(type -> typeService.delete(type.getId()));
         geolocationService.getAll().forEach(geolocation -> geolocationService.delete(geolocation.getId()));
     }
@@ -75,15 +78,31 @@ class ApartmentServiceTests {
     @Test
     @Order(1)
     void createTest() {
+        Assertions.assertEquals(1, apartmentService.getAll(type1.getId(), geolocation1.getId()).size());
         Assertions.assertEquals(3, apartmentService.getAll(0L, 0L).size());
-        Assertions.assertEquals(0, apartmentService.getAll(0L, 0L).size());
     }
 
     @Test
     @Order(2)
     void orderFilterTest() {
-        Assertions.assertEquals(2, apartmentService.getAll(type1.getId(), geolocation1.getId()).size());
-        Assertions.assertEquals(3, apartmentService.getAll(type1.getId(), geolocation2.getId()).size());
-        Assertions.assertEquals(2, apartmentService.getAll(type1.getId(), geolocation3.getId()).size());
+        Assertions.assertEquals(1, apartmentService.getAll(type1.getId(), geolocation1.getId()).size());
+        Assertions.assertEquals(0, apartmentService.getAll(type1.getId(), geolocation2.getId()).size());
+        Assertions.assertEquals(1, apartmentService.getAll(type2.getId(), geolocation2.getId()).size());
+    }
+
+    @Test
+    @Order(3)
+    void deleteTest() {
+        apartmentService.delete(7L);
+        Assertions.assertEquals(2, apartmentService.getAll(0L, 0L).size());
+        final ApartmentEntity last = apartmentService.get(8L);
+        Assertions.assertEquals(8, last.getId());
+
+        final ApartmentEntity newEntity = apartmentService.create(
+                new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
+                        "dfdsfds sdf", "опр", geolocation1, true, 3));
+
+        Assertions.assertEquals(3, apartmentService.getAll(0L, 0L).size());
+        Assertions.assertEquals(10L, newEntity.getId());
     }
 }

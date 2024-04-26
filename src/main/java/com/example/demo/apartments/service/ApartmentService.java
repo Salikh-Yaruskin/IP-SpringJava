@@ -28,6 +28,9 @@ public class ApartmentService {
 
     @Transactional(readOnly = true)
     public List<ApartmentEntity> getAll(Long typeId, Long geolocationId) {
+        if (typeId <= 0L || geolocationId <= 0) {
+            return (List<ApartmentEntity>) repository.findAll();
+        }
         return repository.findByTypeIdAndGeolocationId(typeId, geolocationId);
     }
 
