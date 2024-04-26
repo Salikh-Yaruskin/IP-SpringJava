@@ -1,35 +1,39 @@
 package com.example.demo.apartments.service;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
 
 import com.example.demo.apartments.model.ApartmentEntity;
 import com.example.demo.apartments.repository.ApartmentRepository;
 import com.example.demo.core.error.NotFoundException;
+import com.example.demo.geolocations.repository.GeolocationRepository;
+import com.example.demo.types.repository.TypeRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ApartmentService {
     private final ApartmentRepository repository;
+    private final TypeRepository typeRepository;
+    private final GeolocationRepository geolocationRepository;
 
-    public ApartmentService(ApartmentRepository repository) {
+    public ApartmentService(ApartmentRepository repository, TypeRepository typeRepository,
+            GeolocationRepository geolocationRepository) {
         this.repository = repository;
+        this.typeRepository = typeRepository;
+        this.geolocationRepository = geolocationRepository;
     }
 
     @Transactional(readOnly = true)
     public List<ApartmentEntity> getAll(Long typeId, Long geolocationId) {
-        if (typeId <= 0L) {
-            return null;
-        } else {
-            return repository.findByTypeIdAndGeolocationId(typeId, geolocationId);
-        }
+        return repository.findByTypeIdAndGeolocationId(typeId, geolocationId);
     }
 
     @Transactional(readOnly = true)
-    public ApartmentEntity get(Long id) {
-        return repository.findOneById(id)
+    public ApartmentEntity get(long id) {
+        return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ApartmentEntity.class, id));
     }
 
@@ -41,6 +45,7 @@ public class ApartmentService {
         return repository.save(entity);
     }
 
+    @Transactional
     public ApartmentEntity update(Long id, ApartmentEntity entity) {
         final ApartmentEntity existsEntity = get(id);
         existsEntity.setType(entity.getType());
@@ -55,7 +60,8 @@ public class ApartmentService {
         return repository.save(existsEntity);
     }
 
-    public ApartmentEntity delete(Long id) {
+    @Transactional
+    public ApartmentEntity delete(long id) {
         final ApartmentEntity existsEntity = get(id);
         repository.delete(existsEntity);
         return existsEntity;

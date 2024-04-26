@@ -5,8 +5,10 @@ import java.util.Objects;
 import com.example.demo.core.model.BaseEntity;
 import com.example.demo.types.model.TypeEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -18,7 +20,7 @@ import com.example.demo.geolocations.model.GeolocationEntity;
 @Table(name = "apartments")
 public class ApartmentEntity extends BaseEntity {
     @ManyToOne
-    @JoinColumn(name = "typeId", nullable = false)
+    @JoinColumn(name = "typeId")
     private TypeEntity type;
     @Column(nullable = false)
     private PropertyStatus propertyStatus;
@@ -31,7 +33,7 @@ public class ApartmentEntity extends BaseEntity {
     @Column(nullable = false)
     private String description;
     @ManyToOne
-    @JoinColumn(name = "geolocationId", nullable = false)
+    @JoinColumn(name = "geolocationId")
     private GeolocationEntity geolocation;
     @Column(nullable = false)
     private Boolean shower;
@@ -41,7 +43,7 @@ public class ApartmentEntity extends BaseEntity {
     public ApartmentEntity() {
     }
 
-    public ApartmentEntity(Long id, TypeEntity type,
+    public ApartmentEntity(TypeEntity type,
             PropertyStatus propertyStatus, Boolean popular, Double price, String name,
             String description, GeolocationEntity geolocation, Boolean shower, Integer park) {
         this.type = type;
@@ -139,7 +141,7 @@ public class ApartmentEntity extends BaseEntity {
         if (obj == null || getClass() != obj.getClass())
             return false;
         final ApartmentEntity other = (ApartmentEntity) obj;
-        return Objects.equals(other.getId(), id)
+        return Objects.equals(other.getId(), getId())
                 && Objects.equals(other.getType(), type)
                 && Objects.equals(other.getPropertyStatus(), propertyStatus)
                 && Objects.equals(other.getPopular(), popular)

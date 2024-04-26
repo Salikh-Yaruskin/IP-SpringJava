@@ -1,12 +1,16 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.example.demo.core.error.NotFoundException;
 import com.example.demo.geolocations.model.GeolocationEntity;
@@ -17,6 +21,21 @@ import com.example.demo.geolocations.service.GeolocationService;
 public class GeolocationServiceTests {
     @Autowired
     private GeolocationService geolocationService;
+    private GeolocationEntity geolocation;
+
+    @BeforeEach
+    void createData() {
+        removeData();
+
+        geolocation = geolocationService.create(new GeolocationEntity("Ульяновск"));
+        geolocationService.create(new GeolocationEntity("Москва"));
+        geolocationService.create(new GeolocationEntity("Санкт-Петербург"));
+    }
+
+    @AfterEach
+    void removeData() {
+        geolocationService.getAll().forEach(item -> geolocationService.delete(item.getId()));
+    }
 
     @Test
     void getTest() {
@@ -24,38 +43,41 @@ public class GeolocationServiceTests {
     }
 
     @Test
-    @Order(1)
     void createTest() {
-        geolocationService.create(new GeolocationEntity(null, "Ульяновск"));
-        geolocationService.create(new GeolocationEntity(null, "Москва"));
-        final GeolocationEntity last = geolocationService.create(new GeolocationEntity(null, "Санкт-Петербург"));
         Assertions.assertEquals(3, geolocationService.getAll().size());
-        Assertions.assertEquals(last, geolocationService.get(3L));
+        Assertions.assertEquals(geolocation, geolocationService.get(geolocation.getId()));
     }
 
     @Test
-    @Order(2)
+    void createNotUniqueTest() {
+        final GeolocationEntity nonUniqueType = new GeolocationEntity("Ульяновск");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> geolocationService.create(nonUniqueType));
+    }
+
+    @Test
+    void createNullableTest() {
+        final GeolocationEntity nullableType = new GeolocationEntity(null);
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> geolocationService.create(nullableType));
+    }
+
+    @Test
     void updateTest() {
         final String test = "TEST";
-        final GeolocationEntity entity = geolocationService.get(3L);
-        final String oldName = entity.getName();
-        final GeolocationEntity newEntity = geolocationService.update(3L, new GeolocationEntity(1L, test));
+        final String oldName = geolocation.getName();
+        final GeolocationEntity newEntity = geolocationService.update(geolocation.getId(), new GeolocationEntity(test));
         Assertions.assertEquals(3, geolocationService.getAll().size());
-        Assertions.assertEquals(newEntity, geolocationService.get(3L));
+        Assertions.assertEquals(newEntity, geolocationService.get(geolocation.getId()));
         Assertions.assertEquals(test, newEntity.getName());
         Assertions.assertNotEquals(oldName, newEntity.getName());
     }
 
     @Test
-    @Order(3)
     void deleteTest() {
-        geolocationService.delete(3L);
+        geolocationService.delete(geolocation.getId());
         Assertions.assertEquals(2, geolocationService.getAll().size());
-        final GeolocationEntity last = geolocationService.get(2L);
-        Assertions.assertEquals(2L, last.getId());
 
-        final GeolocationEntity newEntity = geolocationService.create(new GeolocationEntity(null, "Санкт-Петербург"));
+        final GeolocationEntity newEntity = geolocationService.create(new GeolocationEntity(geolocation.getName()));
         Assertions.assertEquals(3, geolocationService.getAll().size());
-        Assertions.assertEquals(4L, newEntity.getId());
+        Assertions.assertNotEquals(geolocation.getId(), newEntity.getId());
     }
 }

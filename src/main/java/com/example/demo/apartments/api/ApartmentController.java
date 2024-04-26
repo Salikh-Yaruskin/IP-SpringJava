@@ -22,7 +22,7 @@ import com.example.demo.geolocations.service.GeolocationService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(Constants.API_URL + "/apartment")
+@RequestMapping(Constants.API_URL + "/apartments")
 public class ApartmentController {
     private final ApartmentService apartmentService;
     private final TypeService typeService;
@@ -49,28 +49,36 @@ public class ApartmentController {
     }
 
     @GetMapping
-    public List<ApartmentDto> getAll(@RequestParam(name = "typeId", defaultValue = "0") Long typeId,
-            @RequestParam(name = "geolocationId", required = false) Long geolocationId) {
-        return apartmentService.getAll(typeId, geolocationId).stream().map(this::toDto).toList();
+    public List<ApartmentDto> getAll(
+            @RequestParam(name = "typeId", defaultValue = "0") Long typeId,
+            @RequestParam(name = "geolocationId", defaultValue = "0") Long geolocationId) {
+        return apartmentService.getAll(typeId, geolocationId).stream()
+                .map(this::toDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ApartmentDto get(@PathVariable(name = "id") Long id) {
+    public ApartmentDto get(
+            @PathVariable(name = "id") Long id) {
         return toDto(apartmentService.get(id));
     }
 
     @PostMapping
-    public ApartmentDto create(@RequestBody @Valid ApartmentDto dto) {
+    public ApartmentDto create(
+            @RequestBody @Valid ApartmentDto dto) {
         return toDto(apartmentService.create(toEntity(dto)));
     }
 
     @PutMapping("/{id}")
-    public ApartmentDto update(@PathVariable(name = "id") Long id, @RequestBody ApartmentDto dto) {
+    public ApartmentDto update(
+            @PathVariable(name = "id") Long id,
+            @RequestBody ApartmentDto dto) {
         return toDto(apartmentService.update(id, toEntity(dto)));
     }
 
     @DeleteMapping("/{id}")
-    public ApartmentDto delete(@PathVariable(name = "id") Long id) {
+    public ApartmentDto delete(
+            @PathVariable(name = "id") Long id) {
         return toDto(apartmentService.delete(id));
     }
 }

@@ -17,7 +17,7 @@ public class TypeEntity extends BaseEntity {
     public TypeEntity() {
     }
 
-    public TypeEntity(Long id, String name) {
+    public TypeEntity(String name) {
         this.name = name;
     }
 
@@ -41,7 +41,7 @@ public class TypeEntity extends BaseEntity {
         if (obj == null || getClass() != obj.getClass())
             return false;
         final TypeEntity other = (TypeEntity) obj;
-        return Objects.equals(other.getId(), id)
+        return Objects.equals(other.getId(), getId())
                 && Objects.equals(other.getName(), name);
     }
 

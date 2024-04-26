@@ -39,7 +39,9 @@ public class TypeController {
 
     @GetMapping
     public List<TypeDto> getAll() {
-        return typeService.getAll().stream().map(this::toDto).toList();
+        return typeService.getAll().stream()
+                .map(this::toDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -53,7 +55,9 @@ public class TypeController {
     }
 
     @PutMapping("/{id}")
-    public TypeDto update(@PathVariable(name = "id") Long id, @RequestBody TypeDto dto) {
+    public TypeDto update(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid TypeDto dto) {
         return toDto(typeService.update(id, toEntity(dto)));
     }
 

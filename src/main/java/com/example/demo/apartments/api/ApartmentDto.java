@@ -11,25 +11,20 @@ public class ApartmentDto {
     @Min(1)
     private Long typeId;
     @NotNull
-    @Min(1)
     private PropertyStatus propertyStatus;
     @NotNull
-    @Min(1)
     private Boolean popular;
     @NotNull
     @Min(1)
     private Double price;
     @NotNull
-    @Min(1)
     private String name;
     @NotNull
-    @Min(1)
     private String description;
     @NotNull
     @Min(1)
     private Long geolocationId;
     @NotNull
-    @Min(1)
     private Boolean shower;
     @NotNull
     @Min(1)

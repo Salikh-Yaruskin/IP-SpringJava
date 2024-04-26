@@ -17,7 +17,7 @@ public class GeolocationEntity extends BaseEntity {
     public GeolocationEntity() {
     }
 
-    public GeolocationEntity(Long id, String name) {
+    public GeolocationEntity(String name) {
         this.name = name;
     }
 
@@ -41,7 +41,7 @@ public class GeolocationEntity extends BaseEntity {
         if (obj == null || getClass() != obj.getClass())
             return false;
         final GeolocationEntity other = (GeolocationEntity) obj;
-        return Objects.equals(other.getId(), id)
+        return Objects.equals(other.getId(), getId())
                 && Objects.equals(other.getName(), name);
     }
 }
