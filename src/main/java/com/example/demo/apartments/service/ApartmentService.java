@@ -35,7 +35,7 @@ public class ApartmentService {
     }
 
     @Transactional(readOnly = true)
-    public ApartmentEntity get(long id) {
+    public ApartmentEntity get(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ApartmentEntity.class, id));
     }
@@ -64,7 +64,7 @@ public class ApartmentService {
     }
 
     @Transactional
-    public ApartmentEntity delete(long id) {
+    public ApartmentEntity delete(Long id) {
         final ApartmentEntity existsEntity = get(id);
         repository.delete(existsEntity);
         return existsEntity;

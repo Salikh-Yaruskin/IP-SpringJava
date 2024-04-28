@@ -34,6 +34,9 @@ class ApartmentServiceTests {
     @Autowired
     private GeolocationService geolocationService;
 
+    private ApartmentEntity apartmentEntity1;
+    private ApartmentEntity apartmentEntity2;
+
     private TypeEntity type1;
     private TypeEntity type2;
     private TypeEntity type3;
@@ -54,9 +57,9 @@ class ApartmentServiceTests {
         geolocation2 = geolocationService.create(new GeolocationEntity("Москва"));
         geolocation3 = geolocationService.create(new GeolocationEntity("Санкт-Петербург"));
 
-        apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
+        apartmentEntity1 = apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
                 "dfdsfds sdf", "опр", geolocation1, true, 3));
-        apartmentService.create(new ApartmentEntity(type2, PropertyStatus.SALE, true, 122423.00,
+        apartmentEntity2 = apartmentService.create(new ApartmentEntity(type2, PropertyStatus.SALE, true, 122423.00,
                 "dfdsfds sdf", "опр", geolocation2, true, 3));
         apartmentService.create(new ApartmentEntity(type3, PropertyStatus.SALE, true, 122423.00,
                 "dfdsfds sdf", "опр", geolocation3, true, 3));
@@ -93,16 +96,16 @@ class ApartmentServiceTests {
     @Test
     @Order(3)
     void deleteTest() {
-        apartmentService.delete(7L);
+        apartmentService.delete(apartmentEntity1.getId());
         Assertions.assertEquals(2, apartmentService.getAll(0L, 0L).size());
-        final ApartmentEntity last = apartmentService.get(8L);
-        Assertions.assertEquals(8, last.getId());
+        final ApartmentEntity last = apartmentService.get(apartmentEntity2.getId());
+        Assertions.assertEquals(26, last.getId());
 
         final ApartmentEntity newEntity = apartmentService.create(
                 new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
                         "dfdsfds sdf", "опр", geolocation1, true, 3));
 
         Assertions.assertEquals(3, apartmentService.getAll(0L, 0L).size());
-        Assertions.assertEquals(10L, newEntity.getId());
+        Assertions.assertEquals(28L, newEntity.getId());
     }
 }
