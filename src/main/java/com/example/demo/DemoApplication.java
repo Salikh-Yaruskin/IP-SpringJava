@@ -15,10 +15,7 @@ import com.example.demo.apartments.model.ApartmentEntity;
 import com.example.demo.apartments.service.ApartmentService;
 import com.example.demo.geolocations.model.GeolocationEntity;
 import com.example.demo.geolocations.service.GeolocationService;
-// import com.example.demo.users.model.UserEntity;
-// import com.example.demo.users.service.UserService;
-// import com.example.demo.comments.model.CommentEntity;
-// import com.example.demo.comments.service.CommentService;
+import com.example.demo.users.service.UserService;
 import com.example.demo.apartments.api.PropertyStatus;
 
 @SpringBootApplication
@@ -28,16 +25,14 @@ public class DemoApplication implements CommandLineRunner {
 	private final TypeService typeService;
 	private final ApartmentService apartmentService;
 	private final GeolocationService geolocationService;
-	// private final UserService userService;
-	// private final CommentService commentService;
+	private final UserService userService;
 
 	public DemoApplication(TypeService typeService, ApartmentService apartmentService,
-			GeolocationService geolocationService/* , UserService userService, CommentService commentService */) {
+			GeolocationService geolocationService, UserService userService) {
 		this.typeService = typeService;
 		this.apartmentService = apartmentService;
 		this.geolocationService = geolocationService;
-		// this.userService = userService;
-		// this.commentService = commentService;
+		this.userService = userService;
 	}
 
 	public static void main(String[] args) {
@@ -57,12 +52,6 @@ public class DemoApplication implements CommandLineRunner {
 			final var geolocation2 = geolocationService.create(new GeolocationEntity("Москва"));
 			final var geolocation3 = geolocationService.create(new GeolocationEntity("Санкт-Петербург"));
 
-			// log.info("Create default user values");
-			// final var user1 = userService.create(new UserEntity(null, "admin",
-			// "admin@gmail.com", "admin"));
-			// final var user2 = userService.create(new UserEntity(null, "Alexei",
-			// "alexei@gmail.com", "12345"));
-
 			log.info("Create default items values");
 			apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
 					"dfdsfds sdf", "опр", geolocation1, true, 3));
@@ -71,26 +60,12 @@ public class DemoApplication implements CommandLineRunner {
 			apartmentService.create(new ApartmentEntity(type3, PropertyStatus.SALE, true, 122423.00,
 					"dfdsfds sdf", "опр", geolocation3, true, 3));
 
-			// apartmentService.create(new ApartmentEntity(type1, PropertyStatus.SALE, true,
-			// 122423.00,
-			// "dfdsfds sdf", "опр", geolocation1, true, 3));
-			// apartmentService.create(new ApartmentEntity(type2, PropertyStatus.SALE, true,
-			// 122423.00,
-			// "dfdsfds sdf1", "опр", geolocation2, true, 3));
-			// apartmentService.create(new ApartmentEntity(type3, PropertyStatus.SALE, true,
-			// 122423.00,
-			// "dfdsfds sdf2", "опр", geolocation3, true, 3));
-
-			// log.info("Create default comment values");
-			// commentService.create(new CommentEntity(null, apartment1, user1, "Класс класс
-			// класс", null));
-			// commentService
-			// .create(new CommentEntity(null, apartment1, user1, "Живу пол года, изменений
-			// не видно", null));
-			// commentService.create(new CommentEntity(null, apartment2, user1, "Прошлая
-			// квартира была лучше", null));
-			// commentService.create(new CommentEntity(null, apartment2, user2, "Необычно",
-			// null));
+			// log.info("Create default user values");
+			// UserEntity userEntity1 = userService.create(new UserEntity("Админ",
+			// "admin@mail.ru", "admin"));
+			// UserEntity userEntity2 = userService.create(new UserEntity("qwer",
+			// "qwer@mail.ru", "qwer"));
+			// userService.create(new UserEntity("asdf", "asdf@mail.ru", "asdf"));
 		}
 	}
 }

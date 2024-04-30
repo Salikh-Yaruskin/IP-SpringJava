@@ -57,7 +57,7 @@ public class TypeController {
     @PutMapping("/{id}")
     public TypeDto update(
             @PathVariable(name = "id") Long id,
-            @RequestBody @Valid TypeDto dto) {
+            @RequestBody TypeDto dto) {
         return toDto(typeService.update(id, toEntity(dto)));
     }
 

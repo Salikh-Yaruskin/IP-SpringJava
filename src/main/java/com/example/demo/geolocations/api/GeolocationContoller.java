@@ -53,7 +53,9 @@ public class GeolocationContoller {
     }
 
     @PutMapping("/{id}")
-    public GeolocationDto update(@PathVariable(name = "id") Long id, @RequestBody GeolocationDto dto) {
+    public GeolocationDto update(
+            @PathVariable(name = "id") Long id,
+            @RequestBody GeolocationDto dto) {
         return toDto(geolocationService.update(id, toEntity(dto)));
     }
 

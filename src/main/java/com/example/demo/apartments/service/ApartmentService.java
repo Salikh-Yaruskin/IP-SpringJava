@@ -35,6 +35,11 @@ public class ApartmentService {
     }
 
     @Transactional(readOnly = true)
+    public List<ApartmentEntity> getAlll() {
+        return StreamSupport.stream(repository.findAll().spliterator(), false).toList();
+    }
+
+    @Transactional(readOnly = true)
     public ApartmentEntity get(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ApartmentEntity.class, id));

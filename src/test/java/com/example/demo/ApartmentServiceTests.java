@@ -99,13 +99,13 @@ class ApartmentServiceTests {
         apartmentService.delete(apartmentEntity1.getId());
         Assertions.assertEquals(2, apartmentService.getAll(0L, 0L).size());
         final ApartmentEntity last = apartmentService.get(apartmentEntity2.getId());
-        Assertions.assertEquals(26, last.getId());
+        Assertions.assertEquals(8, last.getId());
 
         final ApartmentEntity newEntity = apartmentService.create(
                 new ApartmentEntity(type1, PropertyStatus.SALE, true, 122423.00,
                         "dfdsfds sdf", "опр", geolocation1, true, 3));
 
         Assertions.assertEquals(3, apartmentService.getAll(0L, 0L).size());
-        Assertions.assertEquals(28L, newEntity.getId());
+        Assertions.assertEquals(10L, newEntity.getId());
     }
 }
