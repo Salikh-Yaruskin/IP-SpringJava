@@ -9,6 +9,7 @@ import com.example.demo.apartments.repository.ApartmentRepository;
 import com.example.demo.comments.model.CommentEntity;
 import com.example.demo.comments.repository.CommentRepository;
 import com.example.demo.core.error.NotFoundException;
+import com.example.demo.users.model.UserEntity;
 import com.example.demo.users.repository.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;

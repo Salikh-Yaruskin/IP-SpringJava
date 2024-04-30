@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.comments.model.CommentEntity;
 import com.example.demo.core.error.NotFoundException;
 import com.example.demo.users.model.UserEntity;
 import com.example.demo.users.repository.UserRepository;
@@ -28,6 +29,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserEntity> getAll() {
         return StreamSupport.stream(repository.findAll().spliterator(), false).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentEntity> getCommentsByUsers(Long id) {
+        return repository.findByComment(id);
     }
 
     @Transactional(readOnly = true)

@@ -1,11 +1,14 @@
 package com.example.demo.users.model;
 
+import java.util.List;
 import java.util.Objects;
 
+import com.example.demo.comments.model.CommentEntity;
 import com.example.demo.core.model.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,6 +20,8 @@ public class UserEntity extends BaseEntity {
     private String email;
     @Column(nullable = false, unique = true, length = 50)
     private String password;
+    @OneToMany(mappedBy = "user")
+    private List<CommentEntity> comments;
 
     public UserEntity() {
     }

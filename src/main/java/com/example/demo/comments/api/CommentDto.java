@@ -16,10 +16,8 @@ public class CommentDto {
     @Min(1)
     private Long apartmentId;
     @NotNull
-    @Min(1)
     private String description;
     @NotNull
-    @Min(1)
     private Date date;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

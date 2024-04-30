@@ -139,7 +139,7 @@ public class ApartmentEntity extends BaseEntity {
         if (obj == null || getClass() != obj.getClass())
             return false;
         final ApartmentEntity other = (ApartmentEntity) obj;
-        return Objects.equals(other.getId(), id)
+        return Objects.equals(other.getId(), getId())
                 && Objects.equals(other.getType(), type)
                 && Objects.equals(other.getPropertyStatus(), propertyStatus)
                 && Objects.equals(other.getPopular(), popular)

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.comments.model.CommentEntity;
 import com.example.demo.core.configuration.Constants;
 import com.example.demo.users.model.UserEntity;
 import com.example.demo.users.service.UserService;
@@ -45,6 +46,11 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto get(@PathVariable(name = "id") Long id) {
         return toDto(userService.get(id));
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<CommentEntity> getCommentsByUser(@PathVariable("id") Long id) {
+        return userService.getCommentsByUsers(id);
     }
 
     @PostMapping
