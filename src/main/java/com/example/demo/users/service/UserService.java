@@ -37,6 +37,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Long getCommentCountByUserId(Long id) {
+        return repository.countCommentsByUserId(id);
+    }
+
+    @Transactional(readOnly = true)
     public UserEntity get(Long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(UserEntity.class, id));
     }
@@ -64,5 +69,10 @@ public class UserService {
         final UserEntity existsEntity = get(id);
         repository.delete(existsEntity);
         return existsEntity;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserEntity> getUsersOrderedByCommentCount() {
+        return repository.findUsersOrderedByCommentCount();
     }
 }

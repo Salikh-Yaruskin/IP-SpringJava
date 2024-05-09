@@ -53,6 +53,16 @@ public class UserController {
         return userService.getCommentsByUsers(id);
     }
 
+    @GetMapping("/{id}/comments/count")
+    public Long getCommentCountByUser(@PathVariable("id") Long id) {
+        return userService.getCommentCountByUserId(id);
+    }
+
+    @GetMapping("/ordered-by-comments")
+    public List<UserDto> getUsersOrderedByCommentCount() {
+        return userService.getUsersOrderedByCommentCount().stream().map(this::toDto).toList();
+    }
+
     @PostMapping
     public UserDto create(@RequestBody @Valid UserDto dto) {
         return toDto(userService.create(toEntity(dto)));

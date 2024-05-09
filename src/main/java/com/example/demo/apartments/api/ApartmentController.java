@@ -1,8 +1,12 @@
 package com.example.demo.apartments.api;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,4 +85,16 @@ public class ApartmentController {
             @PathVariable(name = "id") Long id) {
         return toDto(apartmentService.delete(id));
     }
+
+    @GetMapping("/ordered")
+    public List<ApartmentDto> getApartmentsByCommentCount(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return apartmentService.getApartmentsOrderedByCommentCount(pageable)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

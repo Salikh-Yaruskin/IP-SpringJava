@@ -1,5 +1,6 @@
 package com.example.demo.apartments.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.example.demo.core.model.BaseEntity;
@@ -9,9 +10,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import com.example.demo.apartments.api.PropertyStatus;
+import com.example.demo.comments.model.CommentEntity;
 import com.example.demo.geolocations.model.GeolocationEntity;
 
 @Entity
@@ -37,6 +40,8 @@ public class ApartmentEntity extends BaseEntity {
     private Boolean shower;
     @Column(nullable = false)
     private Integer park;
+    @OneToMany(mappedBy = "apartment")
+    private List<CommentEntity> comments;
 
     public ApartmentEntity() {
     }

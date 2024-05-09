@@ -3,6 +3,9 @@ package com.example.demo.apartments.service;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.apartments.model.ApartmentEntity;
@@ -73,5 +76,10 @@ public class ApartmentService {
         final ApartmentEntity existsEntity = get(id);
         repository.delete(existsEntity);
         return existsEntity;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ApartmentEntity> getApartmentsOrderedByCommentCount(Pageable pageable) {
+        return repository.findApartamentsOrderedByCommentCount(pageable);
     }
 }
