@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.example.demo.comments.model.CommentEntity;
 import com.example.demo.users.model.UserEntity;
 
-public interface UserRepository extends CrudRepository<UserEntity, Long> {
+public interface UserRepository extends CrudRepository<UserEntity, Long>, PagingAndSortingRepository<UserEntity, Long> {
+
     Optional<UserEntity> findByNameIgnoreCase(String name);
 
     @Query("select comments from UserEntity d where d.id = ?1")

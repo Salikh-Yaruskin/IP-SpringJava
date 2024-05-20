@@ -19,9 +19,10 @@ import com.example.demo.types.service.TypeService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(Constants.API_URL + "/type")
+@RequestMapping(TypeController.URL)
 public class TypeController {
     private final TypeService typeService;
+    public static final String URL = Constants.ADMIN_PREFIX + "/type";
     private final ModelMapper modelMapper;
 
     public TypeController(TypeService typeService, ModelMapper modelMapper) {

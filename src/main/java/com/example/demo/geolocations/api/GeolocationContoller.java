@@ -19,8 +19,9 @@ import com.example.demo.geolocations.service.GeolocationService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(Constants.API_URL + "/geolocation")
+@RequestMapping(GeolocationContoller.URL)
 public class GeolocationContoller {
+    public static final String URL = Constants.ADMIN_PREFIX + "/geolocation";
     private final GeolocationService geolocationService;
     private final ModelMapper modelMapper;
 

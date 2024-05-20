@@ -26,8 +26,9 @@ import com.example.demo.geolocations.service.GeolocationService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(Constants.API_URL + "/apartments")
+@RequestMapping(ApartmentController.URL)
 public class ApartmentController {
+    public static final String URL = Constants.ADMIN_PREFIX + "/apartments";
     private final ApartmentService apartmentService;
     private final TypeService typeService;
     private final GeolocationService geolocationService;

@@ -1,27 +1,35 @@
 package com.example.demo.users.api;
 
 import java.util.List;
-
+import java.util.Map;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.comments.model.CommentEntity;
+import com.example.demo.core.api.PageAttributesMapper;
 import com.example.demo.core.configuration.Constants;
 import com.example.demo.users.model.UserEntity;
 import com.example.demo.users.service.UserService;
 
 import jakarta.validation.Valid;
 
-@RestController
-@RequestMapping(Constants.API_URL + "/user")
+@Controller
+@RequestMapping(UserController.URL)
 public class UserController {
+    public static final String URL = Constants.ADMIN_PREFIX + "/user";
+    private static final String USER_VIEW = "user";
+    private static final String USER_EDIT_VIEW = "user-edit";
+    private static final String PAGE_ATTRIBUTE = "page";
+    private static final String USER_ATTRIBUTE = "user";
     private final UserService userService;
     private final ModelMapper modelMapper;
 
@@ -39,8 +47,13 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getAll() {
-        return userService.getAll().stream().map(this::toDto).toList();
+    public String getAll(@RequestParam(name = PAGE_ATTRIBUTE, defaultValue = "0") int page,
+            Model model) {
+        final Map<String, Object> attributes = PageAttributesMapper.toAttributes(
+                userService.getAll(page, Constants.DEFUALT_PAGE_SIZE), this::toDto);
+        model.addAllAttributes(attributes);
+        model.addAttribute(PAGE_ATTRIBUTE, page);
+        return USER_VIEW;
     }
 
     @GetMapping("/{id}")
@@ -63,18 +76,71 @@ public class UserController {
         return userService.getUsersOrderedByCommentCount().stream().map(this::toDto).toList();
     }
 
-    @PostMapping
-    public UserDto create(@RequestBody @Valid UserDto dto) {
-        return toDto(userService.create(toEntity(dto)));
+    @GetMapping("/edit/")
+    public String create(
+            @RequestParam(name = PAGE_ATTRIBUTE, defaultValue = "0") int page,
+            Model model) {
+        model.addAttribute(USER_ATTRIBUTE, new UserDto());
+        model.addAttribute(PAGE_ATTRIBUTE, page);
+        return USER_EDIT_VIEW;
     }
 
-    @PutMapping("/{id}")
-    public UserDto update(@PathVariable(name = "id") Long id, @RequestBody UserDto dto) {
-        return toDto(userService.update(id, toEntity(dto)));
+    @PostMapping("/edit/")
+    public String create(
+            @RequestParam(name = PAGE_ATTRIBUTE, defaultValue = "0") int page,
+            @ModelAttribute(name = USER_ATTRIBUTE) @Valid UserDto user,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(PAGE_ATTRIBUTE, page);
+            return USER_EDIT_VIEW;
+        }
+        redirectAttributes.addAttribute(PAGE_ATTRIBUTE, page);
+        userService.create(toEntity(user));
+        return Constants.REDIRECT_VIEW + URL;
     }
 
-    @DeleteMapping("/{id}")
-    public UserDto delete(@PathVariable(name = "id") Long id) {
-        return toDto(userService.delete(id));
+    @GetMapping("/edit/{id}")
+    public String update(
+            @PathVariable(name = "id") Long id,
+            @RequestParam(name = PAGE_ATTRIBUTE, defaultValue = "0") int page,
+            Model model) {
+        if (id <= 0) {
+            throw new IllegalArgumentException();
+        }
+        model.addAttribute(USER_ATTRIBUTE, toDto(userService.get(id)));
+        model.addAttribute(PAGE_ATTRIBUTE, page);
+        return USER_EDIT_VIEW;
+    }
+
+    @PostMapping("/edit/{id}")
+    public String update(
+            @PathVariable(name = "id") Long id,
+            @RequestParam(name = PAGE_ATTRIBUTE, defaultValue = "0") int page,
+            @ModelAttribute(name = USER_ATTRIBUTE) @Valid UserDto user,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute(PAGE_ATTRIBUTE, page);
+            return USER_EDIT_VIEW;
+        }
+        if (id <= 0) {
+            throw new IllegalArgumentException();
+        }
+        redirectAttributes.addAttribute(PAGE_ATTRIBUTE, page);
+        userService.update(id, toEntity(user));
+        return Constants.REDIRECT_VIEW + URL;
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(
+            @PathVariable(name = "id") Long id,
+            @RequestParam(name = PAGE_ATTRIBUTE, defaultValue = "0") int page,
+            RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute(PAGE_ATTRIBUTE, page);
+        userService.delete(id);
+        return Constants.REDIRECT_VIEW + URL;
     }
 }

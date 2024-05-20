@@ -22,8 +22,9 @@ import com.example.demo.users.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(Constants.API_URL + "/comments")
+@RequestMapping(CommentController.URL)
 public class CommentController {
+    public static final String URL = Constants.ADMIN_PREFIX + "/comments";
     private final CommentService commentService;
     private final ApartmentService apartmentService;
     private final UserService userService;

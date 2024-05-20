@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Тарелька</title>
+    <script type="text/javascript" src="/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <!-- <link rel="stylesheet" href="/css/style.css" /> -->
+</head>
+
+<body class="h-100 d-flex flex-column">
+    <nav class="navbar navbar-expand-md my-navbar" data-bs-theme="dark">
+    </nav>
+    <main class="container-fluid p-2" layout:fragment="content">
+    </main>
+    <footer class="my-footer mt-auto d-flex flex-shrink-0 justify-content-center align-items-center">
+        Автор, [[${#dates.year(#dates.createNow())}]]
+    </footer>
+</body>
+
+</html>

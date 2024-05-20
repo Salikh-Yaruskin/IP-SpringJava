@@ -18,10 +18,11 @@ public class UserEntity extends BaseEntity {
     private String name;
     @Column(nullable = false, unique = true, length = 50)
     private String email;
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true)
     private String password;
     @OneToMany(mappedBy = "user")
     private List<CommentEntity> comments;
+    private UserRole role;
 
     public UserEntity() {
     }
@@ -30,6 +31,7 @@ public class UserEntity extends BaseEntity {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = UserRole.USER;
     }
 
     public String getName() {
@@ -56,9 +58,17 @@ public class UserEntity extends BaseEntity {
         this.password = password;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password);
+        return Objects.hash(id, name, email, password, role);
     }
 
     @Override
@@ -71,6 +81,7 @@ public class UserEntity extends BaseEntity {
         return Objects.equals(other.getId(), getId())
                 && Objects.equals(other.getName(), name)
                 && Objects.equals(other.getEmail(), email)
-                && Objects.equals(other.getPassword(), password);
+                && Objects.equals(other.getPassword(), password)
+                && Objects.equals(other.getRole(), role);
     }
 }

@@ -1,27 +1,21 @@
 package com.example.demo.users.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public class UserDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
+public class UserRegistrationDto {
     @NotBlank
+    @Size(min = 3, max = 20)
     private String name;
     @NotBlank
+    @Size(min = 3, max = 20)
     private String email;
     @NotBlank
+    @Size(min = 3, max = 20)
     private String password;
-    private String role;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @NotBlank
+    @Size(min = 3, max = 20)
+    private String passwordConfirm;
 
     public String getName() {
         return name;
@@ -47,11 +41,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getPasswordConfirm() {
+        return passwordConfirm;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 }
